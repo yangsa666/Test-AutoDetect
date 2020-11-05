@@ -1,9 +1,4 @@
-﻿#Fill MOPCC email address
-#Please change the SMPT to be the email address you want to debugging.
-#$SMTP = "Rocky1@msftofetesttenant1003.com" ##Example MOPCC account
-#$SMTP = "sayang@microsoft.com" ##Example O365 account
-
-#How to use this script
+﻿#How to use this script
 #Step1: Download to your Computer 
 #Step2: Open Powershell to locate the folder where the script is
 #Step3: Run .\AuodetectDebugging.ps1 -SMTP {theTestEmailAddress}
