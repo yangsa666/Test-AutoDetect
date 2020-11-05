@@ -2,6 +2,7 @@
 #Step1: Download to your Computer 
 #Step2: Open Powershell to locate the folder where the script is
 #Step3: Run .\AuodetectDebugging.ps1 -SMTP {theTestEmailAddress}
+
 param (
     [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
     [String[]]$SMTP
@@ -76,7 +77,7 @@ if($webResponse1.StatusCode -eq 200 ) {
             }
         }
         else {
-              #If it's false, it means autodetect works fine and got the EAS endpoint from AutoDv2. Output AutoDetect response.
+            #If it's false, it means autodetect works fine and got the EAS endpoint from AutoDv2. Output AutoDetect response.
             Write-Host
             Write-Host "Autodetect detected this is a MOPCC acount and it has the following services listed for the user." -ForegroundColor Green
             Write-Host "This should have AAD pointing to Microsoft Online and On-Premises to the correct EAS URL." -ForegroundColor Yellow
@@ -101,7 +102,7 @@ if($webResponse1.StatusCode -eq 200 ) {
             Write-Host
         }
         else {
-              #If autoDetect return services, use services to recognize account type.
+            #If autoDetect return services, use services to recognize account type.
             Write-Host
             Write-Host "Autodetect detected this account as a (an)" $jsonResponse1.services.service "account, if it's not expected, please contact Outlook Mobile Support to fix it." -ForegroundColor Green
             Write-Host "---------------------------------------------------------------------------------------------------------------"
