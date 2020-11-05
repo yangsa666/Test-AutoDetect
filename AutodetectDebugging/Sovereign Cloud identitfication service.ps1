@@ -3,3 +3,5 @@ $configServiceUrl = "https://officeclient.microsoft.com/config16processed?rs=en-
 $headers = @{'Accept' = 'application/json'}
 $getFederationProviderEndpoint = Invoke-WebRequest -Uri "$($configServiceUrl)&services=GetFederationProvider" -Headers $headers -Method GET
 $getAutoDiscoverEndpoint = Invoke-WebRequest -Uri "$($configServiceUrl)&services=ExchangeAutoDiscoverV2Url" -Headers $headers -Method GET
+$xml1 = $getFederationProviderEndpoint.Content | ConvertTo-Xml
+$xml2 = $getAutoDiscoverEndpoint.Content | ConvertTo-Xml
