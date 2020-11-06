@@ -18,32 +18,32 @@ $getAutoDiscoverEndpoint = Invoke-WebRequest -Uri "$($configServiceUrl)&services
 $obj2 = $getAutoDiscoverEndpoint.Content | ConvertFrom-Json
 $autoDiscoverUrl = $obj2.'o:OfficeConfig'.'o:services'.'o:service'.'o:url'
 
-#Call emailHrd service
-$webResponse = Invoke-WebRequest -Uri "$($emailHrdUrl)?domain=$($SMTPAddress[1])" -Headers $headers -Method GET
-$emailHrdResult = $webResponse.Content
-if(!$emailHrdResult -eq "Global") {
-    callAutoDiscover
-}
-else {
-    callAutoDetect
-}
-
 #Call AutoDiscover service
 function callAutoDiscover {
-    param (
-        OptionalParameters
-    )
-    
+    $requestUrl = "$($autoDiscoverUrl)/v1.0/$($SMTP)?protocol=rest"
+    Write-Host $requestUrl
+    $callAutoDiscover = Invoke-WebRequest -Uri $requestUrl -Headers $headers -Method GET
+    $autoDiscoverResult = $callAutoDiscover.Content | ConvertFrom-Json
+    $aadDisocverUrl = $autoDiscoverResult.Url
+    Write-Host $autoDiscoverResult
+    Write-Host $aadDisocverUrl
 }
 
 #Discover AAD Authority
-function FunctionName {
-    param (
-        OptionalParameters
-    )
-    
+function discoveryAadAuthority {
+    process{
+        try{
+            $emptyBearerHeader =  @{ 'Authorization' = 'Bearer'}
+            $aadDiscoverResult = Invoke-WebRequest -Uri $aadDisocverUrl -Headers $emptyBearerHeader -Method Options
+            $aadUrl = $aadDiscoverResult.Headers
+            Write-Host $aadUrl
+        }
+        catch{
+            $Exception = $_.Exception
+            
+        }
+    }
 }
-
 #Call AutoDetect service
 function callAutoDetect {
     $autoDetectURL = "https://prod-autodetect.outlookmobile.com/detect?protocols=eas,rest-cloud,imap,pop3,smtp&timeout=13.5&services=office365,outlook,google,icloud,yahoo"
@@ -52,12 +52,23 @@ function callAutoDetect {
     $webResponse1 = Invoke-WebRequest -Uri $autoDetectURL -Headers $authorizationHeader -Method GET
     $autoDetectResult = $webResponse1.Content | ConvertFrom-Json
     $requestId = $webResponse1.Headers.'X-Request-Id'
+    Write-Host $autoDetectResult
 }
 
-Call OnPrem AutoDiscoverV2
-function callOnPremAutoDiscover {
-    param (
-        OptionalParameters
-    )
-    
+#Call OnPrem AutoDiscoverV2
+
+
+#Call emailHrd service
+$webResponse = Invoke-WebRequest -Uri "$($emailHrdUrl)?domain=$($SMTPAddress[1])" -Headers $headers -Method GET
+$emailHrdResult = $webResponse.Content
+if(!$emailHrdResult -eq "Global") {
+    callAutoDiscover
+    Write-Host
+    Write-Host "This account is a sovereign cloud user, calling EXO AutoDisocver service"
 }
+else {
+    callAutoDetect
+    Write-Host
+    Write-Host "This account is not a sovereign cloud user, calling EXO AutoDisocver service"
+}
+
