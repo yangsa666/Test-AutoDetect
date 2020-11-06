@@ -35,12 +35,15 @@ function discoveryAadAuthority {
         try{
             $emptyBearerHeader =  @{ 'Authorization' = 'Bearer'}
             $aadDiscoverResult = Invoke-WebRequest -Uri $aadDisocverUrl -Headers $emptyBearerHeader -Method Options
-            $aadUrl = $aadDiscoverResult.Headers
-            Write-Host $aadUrl
         }
         catch{
-            $Exception = $_.Exception
-            
+            $exception = $_.Exception
+            $authenticateData = $exception.Response.Headers.GetValues(5).split(",")
+            $value = $authenticateData[3].subString(' authorization_uri="'.Length)
+            $aadUrl = $value.substring(0, $value.indexOf('"'))
+            Write-Host
+            Write-Host "Sent an empty Bearer token auth challenge to AAD discover endpoint,"
+            Write-Host "got the AAD authorize Url: $($aadUrl)"            
         }
     }
 }
@@ -63,6 +66,12 @@ $webResponse = Invoke-WebRequest -Uri "$($emailHrdUrl)?domain=$($SMTPAddress[1])
 $emailHrdResult = $webResponse.Content
 if(!$emailHrdResult -eq "Global") {
     callAutoDiscover
+    Switch($emailHrdResult){
+        Global {$accountType = }
+        partner.microsoftonline.cn {$accountType = "Gallatin"}
+        microsoftonline.us {$accountType =  "GCC High"}
+        microsoftonline.de {$accountType =  "Black Forest"}
+    }
     Write-Host
     Write-Host "This account is a sovereign cloud user, calling EXO AutoDisocver service"
 }
