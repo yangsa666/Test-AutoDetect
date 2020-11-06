@@ -23,6 +23,20 @@ function callEXOAutoDv2 {
                 Write-Host "If your account is a Hybrid Exchange account, please ensure your Hybrid configuration are setup correctly." -ForegroundColor Yellow
                 Write-Host "If your account is not an O365 or Hybrid Exchange account, please contact Outlook Mobile Support for help." -ForegroundColor Yellow
                 Write-Host "---------------------------------------------------------------------------------------------------------------"
+                Write-Host "Email:      " $jsonResponse1.email
+                Write-Host "Service:    " $jsonResponse1.services.service
+                Write-Host "Protocol:   " $jsonResponse1.services.protocol
+                Write-Host "Hostname:   " $jsonResponse1.services.hostname
+                Write-Host "Azure AD:   " $jsonResponse1.services.aad
+                Write-Host "On-Premises:" $jsonResponse1.services.onprem
+                Write-Host "X-Request-Id:" $requestId
+                Write-Host
+            }elseif ($jsonResponse2.Url -eq "https://partner.outlook.cn/Microsoft-Server-ActiveSync") {
+                Write-Host
+                Write-Host "We detected this mailbox as an O365 (Gallatin) account." -ForegroundColor Green
+                Write-Host "If your account is a Hybrid Exchange account, please ensure your Hybrid configuration are setup correctly." -ForegroundColor Yellow
+                Write-Host "If your account is not an O365 or Hybrid Exchange account, please contact Outlook Mobile Support for help." -ForegroundColor Yellow
+                Write-Host "---------------------------------------------------------------------------------------------------------------"
                 Write-Host "Service:    " $jsonResponse1.services.service
                 Write-Host "Protocol:   " $jsonResponse1.services.protocol
                 Write-Host "Hostname:   " $jsonResponse1.services.hostname
@@ -60,8 +74,7 @@ $requestId = $webResponse1.Headers.'X-Request-Id'
 #Check if the reponse is expected for MOPCC accounts
 if($webResponse1.StatusCode -eq 200 ) {
     #Check if the service is Office365, if not, it needs to contact OM PG to change it
-    if($jsonResponse1.services.service -eq "Office365"){
-        
+    if(!!$jsonResponse1.services.service -eq "office365"){
         #Check if it returns expected onprem EAS URL in the response
         if(!$jsonResponse1.services.onprem) {
             if($jsonResponse1.services.protocol -eq "rest") {
@@ -94,12 +107,30 @@ if($webResponse1.StatusCode -eq 200 ) {
     else {
         #If autoDetect doesn't return services, use protocols to recognize account type.
         if(!$jsonResponse1.services.service) {
-            Write-Host
-            Write-Host "Autodetect detected this account as a (an)" $jsonResponse1.protocols.protocol "account, if it's not expected, please contact Outlook Mobile Support to fix it." -ForegroundColor Green
-            Write-Host "---------------------------------------------------------------------------------------------------------------"
-            Write-Host "Protocol:   " $jsonResponse1.protocols
-            Write-Host "X-Request-Id:" $requestId
-            Write-Host
+            if($jsonResponse1.protocols.hostname -ccontains "partner.outlook.cn") {
+                Write-Host
+                Write-Host "Autodetect detected this account as an O365 (Gallatin) account, if it's not expected, please contact Outlook Mobile Support to fix it." -ForegroundColor Green
+                Write-Host "---------------------------------------------------------------------------------------------------------------"
+                Write-Host "Protocol:   " $jsonResponse1.protocols
+                Write-Host "X-Request-Id:" $requestId
+                Write-Host
+            }
+            elseif($jsonResponse1.protocols.autodiscover -eq "autodiscover-s.outlook.de") {
+                Write-Host
+                Write-Host "Autodetect detected this account as an O365 (BlackForest) account, if it's not expected, please contact Outlook Mobile Support to fix it." -ForegroundColor Green
+                Write-Host "---------------------------------------------------------------------------------------------------------------"
+                Write-Host "Protocol:   " $jsonResponse1.protocols
+                Write-Host "X-Request-Id:" $requestId
+                Write-Host
+            }
+            else{
+                Write-Host
+                Write-Host "Autodetect detected this account as a (an)" $jsonResponse1.protocols.protocol "account, if it's not expected, please contact Outlook Mobile Support to fix it." -ForegroundColor Green
+                Write-Host "---------------------------------------------------------------------------------------------------------------"
+                Write-Host "Protocol:   " $jsonResponse1.protocols
+                Write-Host "X-Request-Id:" $requestId
+                Write-Host
+            }
         }
         else {
             #If autoDetect return services, use services to recognize account type.
