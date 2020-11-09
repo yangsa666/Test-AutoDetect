@@ -215,9 +215,10 @@ function getFederationProvider {
     }
 }
 
-getFederationProvider
-
 if($Hybrid){
     callAutoDetect
     callOnPremAutoDV2
+}
+else {
+    getFederationProvider
 }
