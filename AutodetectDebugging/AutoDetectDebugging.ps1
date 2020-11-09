@@ -1,11 +1,11 @@
 param (
     [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
-    [String[]]$SMTP,
+    [String[]]$Email,
     [Switch]$Hybrid,
     [String]$CustomAutoD
 )
 
-$SMTPAddress = $SMTP.Split("@")
+$EmailAddress = $Email.Split("@")
 $headers = @{'Accept' = 'application/json'}
 
 #Get federation provider
@@ -14,7 +14,7 @@ function getFederationProvider {
         try {
             Write-Host
             Write-Host "Calling get fedration pvider serivce to see if it's a sovereign cloud account." -ForegroundColor Yellow
-            $getFederationProviderServiceUrl =  "https://odc.officeapps.live.com/odc/v2.1/federationprovider?domain=$($SMTPAddress[1])"
+            $getFederationProviderServiceUrl =  "https://odc.officeapps.live.com/odc/v2.1/federationprovider?domain=$($EmailAddress[1])"
             $getFederationProviderResponse = Invoke-WebRequest -Uri $getFederationProviderServiceUrl -Headers $headers -Method GET
             $getFederationProviderResult = $getFederationProviderResponse.Content | ConvertFrom-Json
             #$environment =  $getFederationProviderResult.environment
@@ -70,7 +70,7 @@ function callAutoDiscover {
         try{
             Write-Host
             Write-Host "Calling AutoDiscover service." -ForegroundColor Yellow
-            $requestUrl = "$($autoDiscoverUrl)/v1.0/$($SMTP)?protocol=rest"
+            $requestUrl = "$($autoDiscoverUrl)/v1.0/$($Email)?protocol=rest"
             $callAutoDiscover = Invoke-WebRequest -Uri $requestUrl -Headers $headers -Method GET
             $autoDiscoverResult = $callAutoDiscover.Content | ConvertFrom-Json
             $aadDisocverUrl = $autoDiscoverResult.Url 
@@ -107,8 +107,8 @@ function discoveryAadAuthority {
 function callAutoDetect {
     process{
         try{
-            $autoDetectURL = "https://prod-autodetect.outlookmobile.com/detect?protocols=eas,rest-cloud,imap,pop3,smtp&timeout=13.5&services=office365,outlook,google,icloud,yahoo"
-            $encodedEmailAddress = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($SMTP))
+            $autoDetectURL = "https://prod-autodetect.outlookmobile.com/detect?protocols=eas,rest-cloud,imap,pop3,Email&timeout=13.5&services=office365,outlook,google,icloud,yahoo"
+            $encodedEmailAddress = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($Email))
             $authorizationHeader = @{'Authorization' = "Basic " + $encodedEmailAddress}
             $autoDetectResponse = Invoke-WebRequest -Uri $autoDetectURL -Headers $authorizationHeader -Method GET
             $autoDetectResult = $autoDetectResponse.Content | ConvertFrom-Json
@@ -223,10 +223,10 @@ function callOnPremAutoDV2 {
     process {
         try {
             if ($CustomAutoD) {
-                $onPremAutoDV2Url = "https://$($CustomAutoD)/autodiscover/autodiscover.json?Email=$($SMTP)&Protocol=activesync&RedirectCount=3"
+                $onPremAutoDV2Url = "https://$($CustomAutoD)/autodiscover/autodiscover.json?Email=$($Email)&Protocol=activesync&RedirectCount=3"
             }
             else {
-                $onPremAutoDV2Url = "https://autodiscover.$($SMTPAddress[1])/autodiscover/autodiscover.json?Email=$($SMTP)&Protocol=activesync&RedirectCount=3"
+                $onPremAutoDV2Url = "https://autodiscover.$($EmailAddress[1])/autodiscover/autodiscover.json?Email=$($Email)&Protocol=activesync&RedirectCount=3"
             }
             $headers = @{
                 'Accept'         = 'application/json'
@@ -249,7 +249,7 @@ function callOnPremAutoDV2 {
             Write-Host "The response should contain the Protocol ActiveSync with a valid URL" -ForegroundColor Yellow
             Write-Host "---------------------------------------------------------------------------------------------------------------"
             Write-Host "ERROR: We were unable to complete the AutoDiscover request." -ForegroundColor Red -Verbose
-            Write-Host "Please ensure that autodiscover.$($SMTPAddress[1]) is the correct AutoDiscover endpoint and is not being blocked by a firewall" -ForegroundColor Yellow -Verbose
+            Write-Host "Please ensure that autodiscover.$($EmailAddress[1]) is the correct AutoDiscover endpoint and is not being blocked by a firewall" -ForegroundColor Yellow -Verbose
             Write-Host
         }
         catch [System.Net.WebException] {
@@ -258,7 +258,7 @@ function callOnPremAutoDV2 {
             Write-Host "The response should contain the Protocol ActiveSync with a valid URL" -ForegroundColor Yellow
             Write-Host "---------------------------------------------------------------------------------------------------------------"
             Write-Host "ERROR: We were unable to complete the AutoDiscover request." -ForegroundColor Red -Verbose
-            Write-Host "Please ensure that autodiscover.$($SMTPAddress[1]) is the correct AutoDiscover endpoint and is able to be resolved in DNS" -ForegroundColor Yellow -Verbose
+            Write-Host "Please ensure that autodiscover.$($EmailAddress[1]) is the correct AutoDiscover endpoint and is able to be resolved in DNS" -ForegroundColor Yellow -Verbose
             Write-Host
         }        
         catch {
