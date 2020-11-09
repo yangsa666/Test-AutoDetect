@@ -16,6 +16,6 @@ You can also run the command with additional params like this:
 
 `.\AuodetectDebugging.ps1 -SMTP {yourTestEmailAddress} -Hybrid -CustomAutoD {theHostnameOfCustomAutoDiscover}` 
 
-`-CustomAutoD {theHostnameOfCustomAutoDiscover}` allow you specificing the custom OnPrem AutoDiscover Hostname.
+`-CustomAutoD {theHostnameOfCustomAutoDiscover}` allows you specificing the custom OnPrem AutoDiscover Hostname.
 
 NOTE: For `callOnPremAutoDV2` function, it's from https://github.com/tweekerz/PowerShell/tree/master/TestHMAEAS
