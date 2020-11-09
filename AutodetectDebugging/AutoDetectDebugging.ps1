@@ -17,7 +17,7 @@ function getFederationProvider {
             $getFederationProviderServiceUrl =  "https://odc.officeapps.live.com/odc/v2.1/federationprovider?domain=$($SMTPAddress[1])"
             $getFederationProviderResponse = Invoke-WebRequest -Uri $getFederationProviderServiceUrl -Headers $headers -Method GET
             $getFederationProviderResult = $getFederationProviderResponse.Content | ConvertFrom-Json
-            $environment =  $getFederationProviderResult.environment
+            #$environment =  $getFederationProviderResult.environment
             $configProvider = $getFederationProviderResult.configProviderName
 
             #Check if it returns configProviderName. If not, it should not be a sovereign cloud account.
@@ -269,7 +269,7 @@ function callOnPremAutoDV2 {
     }
 }
 
-if($Hybrid){
+if($Hybrid) {
     callAutoDetect
     callOnPremAutoDV2
 }
