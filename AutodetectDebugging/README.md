@@ -6,3 +6,5 @@
 **Step2**: Open Powershell to locate the folder where the script is
 
 **Step3**: Run `.\AuodetectDebugging.ps1 -SMTP {yourTestEmailAddress}`
+
+NOTE: For `callOnPremAutoDV2` function, it's from https://github.com/tweekerz/PowerShell/tree/master/TestHMAEAS
