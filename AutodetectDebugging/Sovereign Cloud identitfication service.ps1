@@ -1,6 +1,6 @@
 param (
     [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
-    [String[]]$SMTP
+    [String[]]$SMTP,
     [Switch]$Hybrid,
     [String]$CustomAutoD
 )
