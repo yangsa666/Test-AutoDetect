@@ -25,7 +25,6 @@ function getFederationProvider {
             if(!$configProvider) {
                 Write-Host
                 Write-Host "It's not a sovereign cloud account, continue with AutoDetect." -ForegroundColor Green
-                Write-Host
                 callAutoDetect
             }
             else {
