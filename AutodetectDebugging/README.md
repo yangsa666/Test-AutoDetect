@@ -1,4 +1,4 @@
-# AutodetectDebugging
+# AutoDetectDebugging
 
 ## How to use this script
 **Step1**: Download this script to your Computer 
