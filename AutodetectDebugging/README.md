@@ -13,25 +13,21 @@
 
 You can also run the command with additional params like this:
 
-<<<<<<< HEAD
 `.\AuoDetectDebugging.ps1 -Email {yourTestEmailAddress} -Hybrid` 
-=======
+
 ### `-Hybrid`
 
 `.\AuodetectDebugging.ps1 -Email {yourTestEmailAddress} -Hybrid` 
->>>>>>> daed23beb65b9c8f16ebac1ddd0778ebd1284315
+
 `-Hybrid` will call the On-Prem AutoDiscover endpoint additonally.
 
 **For example:** `.\AuoDetectDebugging.ps1 -Email "hybrid@contoso.com" -Hybrid`
 
-<<<<<<< HEAD
 `.\AuoDetectDebugging.ps1 -Email {yourTestEmailAddress} -Hybrid -CustomAutoD {theHostnameOfCustomAutoDiscover}` 
-=======
 
 ### `-CustomAutoD`
 
 `.\AuodetectDebugging.ps1 -Email {yourTestEmailAddress} -Hybrid -CustomAutoD {theHostnameOfCustomAutoDiscover}` 
->>>>>>> daed23beb65b9c8f16ebac1ddd0778ebd1284315
 
 `-CustomAutoD {theHostnameOfCustomAutoDiscover}` allows you specificing the custom OnPrem AutoDiscover Hostname.
 
