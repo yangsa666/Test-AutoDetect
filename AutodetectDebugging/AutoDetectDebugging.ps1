@@ -35,6 +35,7 @@ function getFederationProvider {
                     "partner.microsoftonline.cn" { Write-Host "It's detected as a Gallatin account." -ForegroundColor Green }
                     "microsoftonline.de" { Write-Host "It's detected as a Black Forest account." -ForegroundColor Green }
                 }
+                getSerivceEndpoints
             }
         }
         catch {
@@ -43,6 +44,31 @@ function getFederationProvider {
     }
 }
 
+#Get EWS, AutoDiscover endpoints
+function getSerivceEndpoints {
+    process{
+        try {
+            Write-Host
+            Write-Host "Calling OfficeClient service to get services endpoints." -ForegroundColor Yellow
+            $configServiceUrl = "https://officeclient.microsoft.com/config16processed?rs=en-us&build=16.0.7612"
+            $getServiceEndpointsResponse = Invoke-WebRequest -Uri "$($configServiceUrl)&services=ExchangeAutoDiscoverV2Url,ExchangeWebService&fp=$($configProvider)" -Headers $headers -Method GET
+            $getServiceEndpointsResult = $getServiceEndpointsResponse.Content | ConvertFrom-Json
+            $exchangeWebServiceUrl = $getServiceEndpointsResult."o:OfficeConfig"."o:services"."o:service"[0]."o:url"
+            $authorityUrl =  $getServiceEndpointsResult."o:OfficeConfig"."o:services"."o:service"[0]."o:ticket"."@o:authorityUrl"
+            $resourceId =  $getServiceEndpointsResult."o:OfficeConfig"."o:services"."o:service"[0]."o:ticket"."@o:resourceId"
+            $exchangeAutoDiscoverV2Url = $getServiceEndpointsResult."o:OfficeConfig"."o:services"."o:service"[1]."o:url"
+            Write-Host "Here are the services endpoints for this account." -ForegroundColor Yellow
+            Write-Host "---------------------------------------------------------------------------------------------------------------"
+            Write-Host "Exchange WebService URL:    " $exchangeWebServiceUrl
+            Write-Host "Authority URL:              " $authorityUrl
+            Write-Host "Resource Id:                " $resourceId
+            Write-Host "Exchange AutoDiscoverV2 URL:" $exchangeAutoDiscoverV2Url
+        }
+        catch {
+            
+        }
+    }
+}
 #Call AutoDetect service
 function callAutoDetect {
     process{
