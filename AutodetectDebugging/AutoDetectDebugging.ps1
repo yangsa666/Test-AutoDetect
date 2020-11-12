@@ -59,6 +59,7 @@ function getSerivceEndpoints {
             $exchangeAutoDiscoverV2Url = $getServiceEndpointsResult."o:OfficeConfig"."o:services"."o:service"[1]."o:url"
             Write-Host "Here are the services endpoints for this account." -ForegroundColor Yellow
             Write-Host "---------------------------------------------------------------------------------------------------------------"
+            Write-Host "Email:                      " $Email
             Write-Host "Exchange WebService URL:    " $exchangeWebServiceUrl
             Write-Host "Authority URL:              " $authorityUrl
             Write-Host "Resource Id:                " $resourceId
@@ -90,11 +91,12 @@ function callAutoDetect {
                         Write-Host "Autodetect detected this is a Hybrid Exchange acount and it has the following services listed for the user." -ForegroundColor Green
                         Write-Host "This should have AAD pointing to Microsoft Online and On-Premises to the correct EAS URL." -ForegroundColor Yellow
                         Write-Host "---------------------------------------------------------------------------------------------------------------"
-                        Write-Host "Service:    " $autoDetectResult.services.service
-                        Write-Host "Protocol:   " $autoDetectResult.services.protocol
-                        Write-Host "Hostname:   " $autoDetectResult.services.hostname
-                        Write-Host "Azure AD:   " $autoDetectResult.services.aad
-                        Write-Host "On-Premises:" $autoDetectResult.services.onprem
+                        Write-Host "Email:       " $autoDetectResult.email
+                        Write-Host "Service:     " $autoDetectResult.services.service
+                        Write-Host "Protocol:    " $autoDetectResult.services.protocol
+                        Write-Host "Hostname:    " $autoDetectResult.services.hostname
+                        Write-Host "Azure AD:    " $autoDetectResult.services.aad
+                        Write-Host "On-Premises: " $autoDetectResult.services.onprem
                         Write-Host "X-Request-Id:" $requestId
                         Write-Host
                     }
@@ -103,6 +105,7 @@ function callAutoDetect {
                         Write-Host
                         Write-Host "Autodetect detected this is an Office 365 acount and it has the following services listed for the user." -ForegroundColor Green
                         Write-Host "---------------------------------------------------------------------------------------------------------------"
+                        Write-Host "Email:       " $autoDetectResult.email
                         Write-Host "Service:     " $autoDetectResult.services.service
                         Write-Host "Protocol:    " $autoDetectResult.services.protocol
                         Write-Host "Hostname:    " $autoDetectResult.services.hostname
@@ -117,6 +120,7 @@ function callAutoDetect {
                         Write-Host "There is no rest protocol detected for this mailbox in Autodetect, but the service provider is Office365"
                         Write-Host "If it's not expected, please contact Outlook Mobile support for help."
                         Write-Host "---------------------------------------------------------------------------------------------------------------"
+                        Write-Host "Email:       " $autoDetectResult.email
                         Write-Host "Service:     " $autoDetectResult.services.service
                         Write-Host "Protocol:    " $autoDetectResult.services.protocol
                         Write-Host "Hostname:    " $autoDetectResult.services.hostname
@@ -132,7 +136,8 @@ function callAutoDetect {
                             Write-Host
                             Write-Host "Autodetect detected this account as a (an)" $autoDetectResult.protocols.protocol "account, if it's not expected, please contact Outlook Mobile Support to fix it." -ForegroundColor Green
                             Write-Host "---------------------------------------------------------------------------------------------------------------"
-                            Write-Host "Protocol:   " $autoDetectResult.protocols
+                            Write-Host "Email:       " $autoDetectResult.email
+                            Write-Host "Protocol:    " $autoDetectResult.protocols
                             Write-Host "X-Request-Id:" $requestId
                             Write-Host
                     }
@@ -141,6 +146,7 @@ function callAutoDetect {
                         Write-Host
                         Write-Host "Autodetect detected this account as a (an)" $autoDetectResult.services.service "account, if it's not expected, please contact Outlook Mobile Support to fix it." -ForegroundColor Green
                         Write-Host "---------------------------------------------------------------------------------------------------------------"
+                        Write-Host "Email:       " $autoDetectResult.email
                         Write-Host "Service:     " $autoDetectResult.services.service
                         Write-Host "Protocol:    " $autoDetectResult.services.protocol $autoDetectResult.protocols
                         Write-Host "X-Request-Id:" $requestId
