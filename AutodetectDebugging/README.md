@@ -5,6 +5,10 @@
 
 **Step2**: Open Powershell to locate the folder where the script is
 
+For Windows, you can open Powershell directly. 
+
+For Mac, you need to install Powershell first, please refer to this doc for installation: https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-macos?view=powershell-7
+
 **Step3**: Run `.\AutoDetectDebugging.ps1 -Email {yourTestEmailAddress}`
 
 **For example**: `.\AutoDetectDebugging.ps1 -Email "test@contoso.com"`
