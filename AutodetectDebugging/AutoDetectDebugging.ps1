@@ -35,7 +35,6 @@ function getFederationProvider {
                     "partner.microsoftonline.cn" { Write-Host "It's detected as a Gallatin account." -ForegroundColor Green }
                     "microsoftonline.de" { Write-Host "It's detected as a Black Forest account." -ForegroundColor Green }
                 }
-                getAutoDiscoverUrl
             }
         }
         catch {
@@ -44,64 +43,6 @@ function getFederationProvider {
     }
 }
 
-
-#Call configService to get autoDiscover service Url
-function getAutoDiscoverUrl {
-    process{
-        try{
-            Write-Host
-            Write-Host "Calling OfficeClient service to discover AutoDiscover URL." -ForegroundColor Yellow
-            $configServiceUrl = "https://officeclient.microsoft.com/config16processed?rs=en-us&build=16.0.7612"
-            $getAutoDiscoverResponse = Invoke-WebRequest -Uri "$($configServiceUrl)&services=ExchangeAutoDiscoverV2Url,ExchangeWebService&fp=$($configProvider)" -Headers $headers -Method GET
-            $getAutoDiscoverResult = $getAutoDiscoverResponse.Content | ConvertFrom-Json
-            $autoDiscoverUrl = $getAutoDiscoverResult.'o:OfficeConfig'.'o:services'.'o:service'.'o:url'[1]
-            callAutoDiscover
-        }
-        catch{
-            Write-Host $_.Exception
-        }
-    }
-}
-
-#Call AutoDiscover service
-function callAutoDiscover {
-    process{
-        try{
-            Write-Host
-            Write-Host "Calling AutoDiscover service." -ForegroundColor Yellow
-            $requestUrl = "$($autoDiscoverUrl)/v1.0/$($Email)?protocol=rest"
-            $callAutoDiscover = Invoke-WebRequest -Uri $requestUrl -Headers $headers -Method GET
-            $autoDiscoverResult = $callAutoDiscover.Content | ConvertFrom-Json
-            $aadDisocverUrl = $autoDiscoverResult.Url 
-            discoveryAadAuthority
-        }
-        catch{
-            Write-Host $_.Exception
-        }
-    }
-}
-
-#Discover AAD Authority
-function discoveryAadAuthority {
-    process{
-        try{
-            Write-Host
-            Write-Host "Discovering AAD authority." -ForegroundColor Yellow
-            $emptyBearerHeader =  @{ 'Authorization' = 'Bearer'}
-            $aadDiscoverResponse = Invoke-WebRequest -Uri $aadDisocverUrl -Headers $emptyBearerHeader -Method Options
-        }
-        catch{
-            $exception = $_.Exception
-            $authenticateData = $exception.Response.Headers.GetValues("WWW-Authenticate").split(",")
-            $value = $authenticateData[3].subString(' authorization_uri="'.Length)
-            $aadUrl = $value.substring(0, $value.indexOf('"'))
-            Write-Host "Sent an empty Bearer token auth challenge to AAD discover endpoint," -ForegroundColor Yellow
-            Write-Host "Found the AAD Authority URL" -ForegroundColor Yellow
-            Write-Host "---------------------------------------------------------------------------------------------------------------"
-            Write-Host "AAD Authority URL:" $($aadUrl)           
-        }
-    }
-}
 #Call AutoDetect service
 function callAutoDetect {
     process{
