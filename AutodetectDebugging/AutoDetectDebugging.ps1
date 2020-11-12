@@ -65,7 +65,7 @@ function getSerivceEndpoints {
             Write-Host "Exchange AutoDiscoverV2 URL:" $exchangeAutoDiscoverV2Url
         }
         catch {
-            
+            $_.Exception
         }
     }
 }
