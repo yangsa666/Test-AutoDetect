@@ -183,7 +183,16 @@ function callAutoDetect {
             }
             elseif($autoDetectResponse.StatusCode -eq 202) {
                 Write-Host
-                Write-Host "No service or protocol found in Autodetect yet, which means there is no record for the domain in autodetect." -ForegroundColor Red
+                Write-Host "No service or protocol found in Autodetect yet (still searching), suggest to correct the email domain and try it later" -ForegroundColor Red
+                Write-Host "---------------------------------------------------------------------------------------------------------------"
+                Write-Host "Status Code:       " $autoDetectResponse.StatusCode
+                Write-Host "Status Description:" $autoDetectResponse.StatusDescription
+                Write-Host "X-Request-Id:      " $requestId
+                Write-Host
+            }
+            elseif($autoDetectResponse.StatusCode -eq 204) {
+                Write-Host
+                Write-Host "No service or protocol found in Autodetect, suggest to correct the email domain." -ForegroundColor Red
                 Write-Host "---------------------------------------------------------------------------------------------------------------"
                 Write-Host "Status Code:       " $autoDetectResponse.StatusCode
                 Write-Host "Status Description:" $autoDetectResponse.StatusDescription
