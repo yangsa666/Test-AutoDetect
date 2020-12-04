@@ -77,7 +77,8 @@ function callAutoDetect {
             $autoDetectURL = "https://prod-autodetect.outlookmobile.com/detect?protocols=eas,rest-cloud,imap,pop3,Email&timeout=13.5&services=office365,outlook,google,icloud,yahoo"
             $encodedEmailAddress = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($Email))
             $authorizationHeader = @{'Authorization' = "Basic " + $encodedEmailAddress}
-            $autoDetectResponse = Invoke-WebRequest -Uri $autoDetectURL -Headers $authorizationHeader -Method GET
+            $userAgent = "PowershellRuntime"
+            $autoDetectResponse = Invoke-WebRequest -Uri $autoDetectURL -Headers $authorizationHeader -UserAgent $userAgent  -Method GET
             $autoDetectResult = $autoDetectResponse.Content | ConvertFrom-Json
             $requestId = $autoDetectResponse.Headers.'X-Request-Id'
             #Write-Host $autoDetectResult
