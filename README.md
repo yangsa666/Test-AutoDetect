@@ -1,9 +1,9 @@
 # Test-AutoDetect
 
 ## How to use this script
-**Step1**: Download this script to your Computer 
+**Step1**: Download this script to your computer: https://github.com/WayneYangsa/Test-AutoDetect/archive/main.zip
 
-**Step2**: Open Powershell to locate the folder where the script is
+**Step2**: Open Powershell to locate the folder where the script is.
 
 - For Windows, you can open Powershell directly. 
 
