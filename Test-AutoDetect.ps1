@@ -81,6 +81,8 @@ function callAutoDetect {
             $autoDetectResponse = Invoke-WebRequest -Uri $autoDetectURL -Headers $authorizationHeader -UserAgent $userAgent  -Method GET
             $autoDetectResult = $autoDetectResponse.Content | ConvertFrom-Json
             $requestId = $autoDetectResponse.Headers.'X-Request-Id'
+            $responseTime = $autoDetectResponse.Headers.'X-Response-Time'
+            $responseDate = $autoDetectResponse.Headers.'Date'
             #Write-Host $autoDetectResult
             if($autoDetectResponse.StatusCode -eq 200 ) {
                 #Check if the service is Office365, if not, it needs to contact OM PG to change it
@@ -92,13 +94,15 @@ function callAutoDetect {
                         Write-Host "Autodetect detected this is a Hybrid Exchange acount and it has the following services listed for the user." -ForegroundColor Green
                         Write-Host "This should have AAD pointing to Microsoft Online and On-Premises to the correct EAS URL." -ForegroundColor Yellow
                         Write-Host "---------------------------------------------------------------------------------------------------------------"
-                        Write-Host "Email:       " $autoDetectResult.email
-                        Write-Host "Service:     " $autoDetectResult.services.service
-                        Write-Host "Protocol:    " $autoDetectResult.services.protocol
-                        Write-Host "Hostname:    " $autoDetectResult.services.hostname
-                        Write-Host "Azure AD:    " $autoDetectResult.services.aad
-                        Write-Host "On-Premises: " $autoDetectResult.services.onprem
-                        Write-Host "X-Request-Id:" $requestId
+                        Write-Host "Email:          " $autoDetectResult.email
+                        Write-Host "Service:        " $autoDetectResult.services.service
+                        Write-Host "Protocol:       " $autoDetectResult.services.protocol
+                        Write-Host "Hostname:       " $autoDetectResult.services.hostname
+                        Write-Host "Azure AD:       " $autoDetectResult.services.aad
+                        Write-Host "On-Premises:    " $autoDetectResult.services.onprem
+                        Write-Host "X-Request-Id:   " $requestId
+                        Write-Host "X-Response-Time:" $responseTime
+                        Write-Host "Date:           " $responseDate
                         Write-Host
                     }
                     elseif ($autoDetectResult.services.protocol -eq "rest") {
@@ -106,13 +110,15 @@ function callAutoDetect {
                         Write-Host
                         Write-Host "Autodetect detected this is an Office 365 acount and it has the following services listed for the user." -ForegroundColor Green
                         Write-Host "---------------------------------------------------------------------------------------------------------------"
-                        Write-Host "Email:       " $autoDetectResult.email
-                        Write-Host "Service:     " $autoDetectResult.services.service
-                        Write-Host "Protocol:    " $autoDetectResult.services.protocol
-                        Write-Host "Hostname:    " $autoDetectResult.services.hostname
-                        Write-Host "Azure AD:    " $autoDetectResult.services.aad
-                        Write-Host "On-Premises: " $autoDetectResult.services.onprem
-                        Write-Host "X-Request-Id:" $requestId
+                        Write-Host "Email:          " $autoDetectResult.email
+                        Write-Host "Service:        " $autoDetectResult.services.service
+                        Write-Host "Protocol:       " $autoDetectResult.services.protocol
+                        Write-Host "Hostname:       " $autoDetectResult.services.hostname
+                        Write-Host "Azure AD:       " $autoDetectResult.services.aad
+                        Write-Host "On-Premises:    " $autoDetectResult.services.onprem
+                        Write-Host "X-Request-Id:   " $requestId
+                        Write-Host "X-Response-Time:" $responseTime
+                        Write-Host "Date:           " $responseDate
                         Write-Host
                     }
                     else {
@@ -121,13 +127,15 @@ function callAutoDetect {
                         Write-Host "There is no rest protocol detected for this mailbox in Autodetect, but the service provider is Office365"
                         Write-Host "If it's not expected, please contact Outlook Mobile support for help."
                         Write-Host "---------------------------------------------------------------------------------------------------------------"
-                        Write-Host "Email:       " $autoDetectResult.email
-                        Write-Host "Service:     " $autoDetectResult.services.service
-                        Write-Host "Protocol:    " $autoDetectResult.services.protocol
-                        Write-Host "Hostname:    " $autoDetectResult.services.hostname
-                        Write-Host "Azure AD:    " $autoDetectResult.services.aad
-                        Write-Host "On-Premises: " $autoDetectResult.services.onprem
-                        Write-Host "X-Request-Id:" $requestId
+                        Write-Host "Email:          " $autoDetectResult.email
+                        Write-Host "Service:        " $autoDetectResult.services.service
+                        Write-Host "Protocol:       " $autoDetectResult.services.protocol
+                        Write-Host "Hostname:       " $autoDetectResult.services.hostname
+                        Write-Host "Azure AD:       " $autoDetectResult.services.aad
+                        Write-Host "On-Premises:    " $autoDetectResult.services.onprem
+                        Write-Host "X-Request-Id:   " $requestId
+                        Write-Host "X-Response-Time:" $responseTime
+                        Write-Host "Date:           " $responseDate
                         Write-Host
                     }
                 }
@@ -137,9 +145,11 @@ function callAutoDetect {
                             Write-Host
                             Write-Host "Autodetect detected this account as a (an)" $autoDetectResult.protocols.protocol "account, if it's not expected, please contact Outlook Mobile Support to fix it." -ForegroundColor Green
                             Write-Host "---------------------------------------------------------------------------------------------------------------"
-                            Write-Host "Email:       " $autoDetectResult.email
-                            Write-Host "Protocol:    " $autoDetectResult.protocols
-                            Write-Host "X-Request-Id:" $requestId
+                            Write-Host "Email:          " $autoDetectResult.email
+                            Write-Host "Protocol:       " $autoDetectResult.protocols
+                            Write-Host "X-Request-Id:   " $requestId
+                            Write-Host "X-Response-Time:" $responseTime
+                            Write-Host "Date:           " $responseDate
                             Write-Host
                     }
                     else {
@@ -147,10 +157,12 @@ function callAutoDetect {
                         Write-Host
                         Write-Host "Autodetect detected this account as a (an)" $autoDetectResult.services.service "account, if it's not expected, please contact Outlook Mobile Support to fix it." -ForegroundColor Green
                         Write-Host "---------------------------------------------------------------------------------------------------------------"
-                        Write-Host "Email:       " $autoDetectResult.email
-                        Write-Host "Service:     " $autoDetectResult.services.service
-                        Write-Host "Protocol:    " $autoDetectResult.services.protocol $autoDetectResult.protocols
-                        Write-Host "X-Request-Id:" $requestId
+                        Write-Host "Email:          " $autoDetectResult.email
+                        Write-Host "Service:        " $autoDetectResult.services.service
+                        Write-Host "Protocol:       " $autoDetectResult.services.protocol $autoDetectResult.protocols
+                        Write-Host "X-Request-Id:   " $requestId
+                        Write-Host "X-Response-Time:" $responseTime
+                        Write-Host "Date:           " $responseDate
                         Write-Host
                     }
                 }
@@ -162,6 +174,8 @@ function callAutoDetect {
                 Write-Host "Status Code:       " $autoDetectResponse.StatusCode
                 Write-Host "Status Description:" $autoDetectResponse.StatusDescription
                 Write-Host "X-Request-Id:      " $requestId
+                Write-Host "X-Response-Time:   " $responseTime
+                Write-Host "Date:          " $responseDate
                 Write-Host
             }
             elseif($autoDetectResponse.StatusCode -eq 204) {
@@ -171,6 +185,8 @@ function callAutoDetect {
                 Write-Host "Status Code:       " $autoDetectResponse.StatusCode
                 Write-Host "Status Description:" $autoDetectResponse.StatusDescription
                 Write-Host "X-Request-Id:      " $requestId
+                Write-Host "X-Response-Time:   " $responseTime
+                Write-Host "Date:          " $responseDate
                 Write-Host
             }
             elseif ($autoDetectResponse.StatusCode -eq 503) {
@@ -181,6 +197,8 @@ function callAutoDetect {
                 Write-Host "Status Code:"        $autoDetectResponse.StatusCode
                 Write-Host "Status Description:" $autoDetectResponse.StatusDescription
                 Write-Host "X-Request-Id:"       $requestId
+                Write-Host "X-Response-Time:   " $responseTime
+                Write-Host "Date:          " $responseDate
                 Write-Host
             }
             else {
@@ -190,6 +208,8 @@ function callAutoDetect {
                 Write-Host "Status Code:"        $autoDetectResponse.StatusCode
                 Write-Host "Status Description:" $autoDetectResponse.StatusDescription
                 Write-Host "X-Request-Id:"       $requestId
+                Write-Host "X-Response-Time:   " $responseTime
+                Write-Host "Date:          " $responseDate
                 Write-Host
             }
 
