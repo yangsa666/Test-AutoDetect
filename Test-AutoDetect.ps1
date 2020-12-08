@@ -84,7 +84,7 @@ function callAutoDetect {
             #Write-Host $autoDetectResult
             if($autoDetectResponse.StatusCode -eq 200 ) {
                 #Check if the service is Office365, if not, it needs to contact OM PG to change it
-                if($autoDetectResult.services.service -eq "office365"){
+                if($autoDetectResult.services.service -eq "office365") {
                     #Check if it returns expected onprem EAS URL in the response
                     if(!!$autoDetectResult.services.onprem) {
                         #If it's true, it means autodetect works fine and got the EAS endpoint from AutoDv2. Output AutoDetect response.
@@ -194,7 +194,7 @@ function callAutoDetect {
             }
 
         }
-        catch{
+        catch {
             Write-Host $_.Exception
         }
     }
