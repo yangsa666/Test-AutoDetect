@@ -125,7 +125,7 @@ function callAutoDetect {
                     else {
                         #If the procotol is not rest, it should be a known account.
                         Write-Host
-                        Write-Host "There is no rest protocol detected for this mailbox in Autodetect, but the service provider is Office365"
+                        Write-Host "There is no rest protocol detected for this mailbox in Autodetect, but the service provider is Office365."
                         Write-Host "If it's not expected, please contact Outlook Mobile support for help."
                         Write-Host "---------------------------------------------------------------------------------------------------------------"
                         Write-Host "Email:          " $autoDetectResult.email
