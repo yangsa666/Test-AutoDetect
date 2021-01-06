@@ -5,6 +5,7 @@ param (
     [String]$CustomAutoD
 )
 
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 $EmailAddress = $Email.Split("@")
 $headers = @{'Accept' = 'application/json'}
 
