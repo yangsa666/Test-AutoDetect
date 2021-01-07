@@ -125,8 +125,7 @@ function callAutoDetect {
                     else {
                         #If the procotol is not rest, it should be a known account.
                         Write-Host
-                        Write-Host "There is no rest protocol detected for this mailbox in Autodetect, but the service provider is Office365."
-                        Write-Host "If it's not expected, please contact Outlook Mobile support for help."
+                        Write-Host "There is no rest protocol detected for this mailbox in Autodetect, but the service provider is Office365." -ForegroundColor Red
                         Write-Host "---------------------------------------------------------------------------------------------------------------"
                         Write-Host "Email:          " $autoDetectResult.email
                         Write-Host "Service:        " $autoDetectResult.services.service
@@ -144,7 +143,7 @@ function callAutoDetect {
                     #If autoDetect doesn't return services, use protocols to recognize account type.
                     if(!$autoDetectResult.services.service) {
                             Write-Host
-                            Write-Host "Autodetect detected this account as a (an)" $autoDetectResult.protocols.protocol "account, if it's not expected, please contact Outlook Mobile Support to fix it." -ForegroundColor Green
+                            Write-Host "Autodetect detected this account as a (an)" $autoDetectResult.protocols.protocol "account." -ForegroundColor Green
                             Write-Host "---------------------------------------------------------------------------------------------------------------"
                             Write-Host "Email:          " $autoDetectResult.email
                             Write-Host "Protocol:       " $autoDetectResult.protocols
@@ -156,7 +155,7 @@ function callAutoDetect {
                     else {
                         #If autoDetect return services, use services to recognize account type.
                         Write-Host
-                        Write-Host "Autodetect detected this account as a (an)" $autoDetectResult.services.service "account, if it's not expected, please contact Outlook Mobile Support to fix it." -ForegroundColor Green
+                        Write-Host "Autodetect detected this account as a (an)" $autoDetectResult.services.service "account." -ForegroundColor Green
                         Write-Host "---------------------------------------------------------------------------------------------------------------"
                         Write-Host "Email:          " $autoDetectResult.email
                         Write-Host "Service:        " $autoDetectResult.services.service
@@ -170,7 +169,7 @@ function callAutoDetect {
             }
             elseif($autoDetectResponse.StatusCode -eq 202) {
                 Write-Host
-                Write-Host "No service or protocol found in Autodetect yet (still searching), suggest to correct the email domain and try it later" -ForegroundColor Red
+                Write-Host "No service or protocol found in Autodetect yet (still searching), suggest to correct the email domain and try it later." -ForegroundColor Red
                 Write-Host "---------------------------------------------------------------------------------------------------------------"
                 Write-Host "Status Code:       " $autoDetectResponse.StatusCode
                 Write-Host "Status Description:" $autoDetectResponse.StatusDescription
@@ -193,7 +192,6 @@ function callAutoDetect {
             elseif ($autoDetectResponse.StatusCode -eq 503) {
                 Write-Host
                 Write-Host "It looks like the service is not avaiable currently, please try again later." -ForegroundColor Red
-                Write-Host "If the issue persits, please contact Outlook Mobile support for help." -ForegroundColor Red
                 Write-Host "---------------------------------------------------------------------------------------------------------------"
                 Write-Host "Status Code:"        $autoDetectResponse.StatusCode
                 Write-Host "Status Description:" $autoDetectResponse.StatusDescription
