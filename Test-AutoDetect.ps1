@@ -14,7 +14,7 @@ function getFederationProvider {
     process{
         try {
             Write-Host
-            Write-Host "Calling GetFederationProvider service to see if it's a sovereign cloud account." -ForegroundColor Yellow
+            Write-Host "Calling GetFederationProvider service to see if it's a sovereign cloud account." -ForegroundColor Green
             $getFederationProviderServiceUrl =  "https://odc.officeapps.live.com/odc/v2.1/federationprovider?domain=$($EmailAddress[1])"
             $getFederationProviderResponse = Invoke-WebRequest -Uri $getFederationProviderServiceUrl -Headers $headers -Method GET
             $getFederationProviderResult = $getFederationProviderResponse.Content | ConvertFrom-Json
