@@ -14,7 +14,7 @@ function getFederationProvider {
     process{
         try {
             Write-Host
-            Write-Host "Calling FederationProvider serivce to see if it's a sovereign cloud account." -ForegroundColor Yellow
+            Write-Host "Calling GetFederationProvider service to see if it's a sovereign cloud account." -ForegroundColor Yellow
             $getFederationProviderServiceUrl =  "https://odc.officeapps.live.com/odc/v2.1/federationprovider?domain=$($EmailAddress[1])"
             $getFederationProviderResponse = Invoke-WebRequest -Uri $getFederationProviderServiceUrl -Headers $headers -Method GET
             $getFederationProviderResult = $getFederationProviderResponse.Content | ConvertFrom-Json
@@ -36,7 +36,7 @@ function getFederationProvider {
                     "partner.microsoftonline.cn" { Write-Host "It's detected as a Gallatin account." -ForegroundColor Green }
                     "microsoftonline.de" { Write-Host "It's detected as a Black Forest account." -ForegroundColor Green }
                 }
-                getSerivceEndpoints
+                getserviceEndpoints
             }
         }
         catch {
@@ -46,7 +46,7 @@ function getFederationProvider {
 }
 
 #Get EWS, AutoDiscover endpoints
-function getSerivceEndpoints {
+function getserviceEndpoints {
     process{
         try {
             Write-Host
@@ -92,7 +92,7 @@ function callAutoDetect {
                     if(!!$autoDetectResult.services.onprem) {
                         #If it's true, it means autodetect works fine and got the EAS endpoint from AutoDv2. Output AutoDetect response.
                         Write-Host
-                        Write-Host "Autodetect detected this is a Hybrid Exchange acount and it has the following services listed for the user." -ForegroundColor Green
+                        Write-Host "Autodetect detected this is a Hybrid Exchange account and it has the following services listed for the user." -ForegroundColor Green
                         Write-Host "This should have AAD pointing to Microsoft Online and On-Premises to the correct EAS URL." -ForegroundColor Yellow
                         Write-Host "---------------------------------------------------------------------------------------------------------------"
                         Write-Host "Email:          " $autoDetectResult.email
@@ -109,7 +109,7 @@ function callAutoDetect {
                     elseif ($autoDetectResult.services.protocol -eq "rest") {
                         #If it's true, it means it's detected as O365 account.
                         Write-Host
-                        Write-Host "Autodetect detected this is an Office 365 acount and it has the following services listed for the user." -ForegroundColor Green
+                        Write-Host "Autodetect detected this is an Office 365 account and it has the following services listed for the user." -ForegroundColor Green
                         Write-Host "---------------------------------------------------------------------------------------------------------------"
                         Write-Host "Email:          " $autoDetectResult.email
                         Write-Host "Service:        " $autoDetectResult.services.service
