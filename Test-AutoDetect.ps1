@@ -75,7 +75,7 @@ function getserviceEndpoints {
 function callAutoDetect {
     process{
         try{
-            $autoDetectURL = "https://prod-autodetect.outlookmobile.com/detect?protocols=eas,rest-cloud,imap,pop3,Email&timeout=13.5&services=office365,outlook,google,icloud,yahoo"
+            $autoDetectURL = "https://prod-AutoDetect.outlookmobile.com/detect?protocols=eas,rest-cloud,imap,pop3,Email&timeout=13.5&services=office365,outlook,google,icloud,yahoo"
             $encodedEmailAddress = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($Email))
             $authorizationHeader = @{'Authorization' = "Basic " + $encodedEmailAddress}
             $userAgent = "PowershellRuntime"
@@ -90,9 +90,9 @@ function callAutoDetect {
                 if($autoDetectResult.services.service -eq "office365") {
                     #Check if it returns expected onprem EAS URL in the response
                     if(!!$autoDetectResult.services.onprem) {
-                        #If it's true, it means autodetect works fine and got the EAS endpoint from AutoDv2. Output AutoDetect response.
+                        #If it's true, it means AutoDetect works fine and got the EAS endpoint from AutoDv2. Output AutoDetect response.
                         Write-Host
-                        Write-Host "Autodetect detected this is a Hybrid Exchange account and it has the following services listed for the user." -ForegroundColor Green
+                        Write-Host "AutoDetect detected this is a Hybrid Exchange account and it has the following services listed for the user." -ForegroundColor Green
                         Write-Host "This should have AAD pointing to Microsoft Online and On-Premises to the correct EAS URL." -ForegroundColor Yellow
                         Write-Host "---------------------------------------------------------------------------------------------------------------"
                         Write-Host "Email:          " $autoDetectResult.email
@@ -109,7 +109,7 @@ function callAutoDetect {
                     elseif ($autoDetectResult.services.protocol -eq "rest") {
                         #If it's true, it means it's detected as O365 account.
                         Write-Host
-                        Write-Host "Autodetect detected this is an Office 365 account and it has the following services listed for the user." -ForegroundColor Green
+                        Write-Host "AutoDetect detected this is an Office 365 account and it has the following services listed for the user." -ForegroundColor Green
                         Write-Host "---------------------------------------------------------------------------------------------------------------"
                         Write-Host "Email:          " $autoDetectResult.email
                         Write-Host "Service:        " $autoDetectResult.services.service
@@ -125,7 +125,7 @@ function callAutoDetect {
                     else {
                         #If the procotol is not rest, it should be a known account.
                         Write-Host
-                        Write-Host "There is no rest protocol detected for this mailbox in Autodetect, but the service provider is Office365." -ForegroundColor Red
+                        Write-Host "There is no rest protocol detected for this mailbox in AutoDetect, but the service provider is Office365." -ForegroundColor Red
                         Write-Host "---------------------------------------------------------------------------------------------------------------"
                         Write-Host "Email:          " $autoDetectResult.email
                         Write-Host "Service:        " $autoDetectResult.services.service
@@ -140,10 +140,10 @@ function callAutoDetect {
                     }
                 }
                 else {
-                    #If autoDetect doesn't return services, use protocols to recognize account type.
+                    #If AutoDetect doesn't return services, use protocols to recognize account type.
                     if(!$autoDetectResult.services.service) {
                             Write-Host
-                            Write-Host "Autodetect detected this account as a (an)" $autoDetectResult.protocols.protocol "account." -ForegroundColor Green
+                            Write-Host "AutoDetect detected this account as a (an)" $autoDetectResult.protocols.protocol "account." -ForegroundColor Green
                             Write-Host "---------------------------------------------------------------------------------------------------------------"
                             Write-Host "Email:          " $autoDetectResult.email
                             Write-Host "Protocol:       " $autoDetectResult.protocols
@@ -153,9 +153,9 @@ function callAutoDetect {
                             Write-Host
                     }
                     else {
-                        #If autoDetect return services, use services to recognize account type.
+                        #If AutoDetect return services, use services to recognize account type.
                         Write-Host
-                        Write-Host "Autodetect detected this account as a (an)" $autoDetectResult.services.service "account." -ForegroundColor Green
+                        Write-Host "AutoDetect detected this account as a (an)" $autoDetectResult.services.service "account." -ForegroundColor Green
                         Write-Host "---------------------------------------------------------------------------------------------------------------"
                         Write-Host "Email:          " $autoDetectResult.email
                         Write-Host "Service:        " $autoDetectResult.services.service
@@ -169,7 +169,7 @@ function callAutoDetect {
             }
             elseif($autoDetectResponse.StatusCode -eq 202) {
                 Write-Host
-                Write-Host "No service or protocol found in Autodetect yet (still searching), suggest to correct the email domain and try it later." -ForegroundColor Red
+                Write-Host "No service or protocol found in AutoDetect yet (still searching), suggest to correct the email domain and try it later." -ForegroundColor Red
                 Write-Host "---------------------------------------------------------------------------------------------------------------"
                 Write-Host "Status Code:       " $autoDetectResponse.StatusCode
                 Write-Host "Status Description:" $autoDetectResponse.StatusDescription
@@ -180,7 +180,7 @@ function callAutoDetect {
             }
             elseif($autoDetectResponse.StatusCode -eq 204) {
                 Write-Host
-                Write-Host "No service or protocol found in Autodetect, suggest to correct the email domain." -ForegroundColor Red
+                Write-Host "No service or protocol found in AutoDetect, suggest to correct the email domain." -ForegroundColor Red
                 Write-Host "---------------------------------------------------------------------------------------------------------------"
                 Write-Host "Status Code:       " $autoDetectResponse.StatusCode
                 Write-Host "Status Description:" $autoDetectResponse.StatusDescription
