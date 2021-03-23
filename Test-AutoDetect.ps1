@@ -126,6 +126,7 @@ function callAutoDetect {
                         #If the procotol is not rest, it should be a known account.
                         Write-Host
                         Write-Host "There is no rest protocol detected for this mailbox in AutoDetect, but the service provider is Office365." -ForegroundColor Red
+                        Write-Host "This could happen when AutoDiscoverV2 calling timed out in AutoDetect backend." -ForegroundColor Red
                         Write-Host "---------------------------------------------------------------------------------------------------------------"
                         Write-Host "Email:          " $autoDetectResult.email
                         Write-Host "Service:        " $autoDetectResult.services.service
