@@ -21,8 +21,6 @@ You can also run the command with additional params like this:
 
 ### `-Hybrid`
 
-`.\Test-AutoDetect.ps1 -Email {yourTestEmailAddress} -Hybrid` 
-
 `-Hybrid` will call the On-Prem AutoDiscover endpoint additonally.
 
 **For example:** `.\Test-AutoDetect.ps1 -Email "hybrid@contoso.com" -Hybrid`
@@ -36,5 +34,10 @@ You can also run the command with additional params like this:
 `-CustomAutoD {theHostnameOfCustomAutoDiscover}` allows you specificing the custom OnPrem AutoDiscover Hostname.
 
 **For example：** `.\Test-AutoDetect.ps1 -Email "hybrid@contoso.com" -Hybrid -CustomAutoD "autodiscover.contoso.com"`
+
+### `-TestAutoDV2`
+
+`-TestAutoDV2` allows you to call the On-Prem AutoDiscoverV2 endpoint alone.
+**For example:**  `.\Test-AutoDetect.ps1 -Email "hybrid@contoso.com" -TestAutoDV2`
 
 NOTE: For `callOnPremAutoDV2` function, it's from https://github.com/tweekerz/PowerShell/tree/master/TestHMAEAS
