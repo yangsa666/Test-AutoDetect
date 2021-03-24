@@ -234,15 +234,21 @@ function callOnPremAutoDV2 {
                 'Accept'         = 'application/json'
                 'Content-Length' = '0'
             }
-            $onPremAutoDV2Response = Invoke-WebRequest -Uri $onPremAutoDV2Url -Headers $headers -Method GET
+            $timeTaken = Measure-Command -Expression {$onPremAutoDV2Response = Invoke-WebRequest -Uri $onPremAutoDV2Url -Headers $headers -Method GET} 
             $onPremAutoDV2Result = $onPremAutoDV2Response.Content | ConvertFrom-Json
+            $milliseconds = $timeTaken.TotalMilliseconds
+            $milliseconds = [Math]::Round($milliseconds, 1)
+            $onPremAutoDV2Result = $onPremAutoDV2Response.Content | ConvertFrom-Json
+            $requestId = $onPremAutoDV2Response.Headers.'request-id'
             Write-Host
             Write-Host "We sent an AutoDiscover Request to On-Premises for the Exchange ActiveSync Virtual Directory and below is the response" -ForegroundColor Green
             Write-Host "The response should contain the Protocol ActiveSync with a valid URL" -ForegroundColor Yellow
             Write-Host "If AutoDetect doesn't return On-Prem value for your Hybrid account, please check your firewall and Hybrid configuration," -ForegroundColor Yellow
             Write-Host "to ensure you have allowed traffic from 'outlookmobile.com'." -ForegroundColor Yellow
             Write-Host "---------------------------------------------------------------------------------------------------------------"
-            Write-Host $onPremAutoDV2Result.Url
+            Write-Host "Response Body: ", $onPremAutoDV2Result
+            Write-Host "Time Taken:    ", $milliseconds, "ms"
+            Write-Host "Request Id:    ", $requestId
             Write-Host
         }
         catch [System.Net.Sockets.SocketException] {
