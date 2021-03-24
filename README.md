@@ -1,7 +1,7 @@
 # Test-AutoDetect
 
 ## How to use this script
-**Step1**: Download this script to your computer: https://github.com/WayneYangsa/Test-AutoDetect/archive/main.zip
+**Step1**: Clone this project to your computer: https://github.com/WayneYangsa/Test-AutoDetect.git
 
 **Step2**: Open Powershell to locate the folder where the script is.
 
