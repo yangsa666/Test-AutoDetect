@@ -2,6 +2,7 @@ param (
     [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
     [String[]]$Email,
     [Switch]$Hybrid,
+    [Switch]$TestAutoDV2,
     [String]$CustomAutoD
 )
 
@@ -279,6 +280,9 @@ function callOnPremAutoDV2 {
 
 if($Hybrid) {
     callAutoDetect
+    callOnPremAutoDV2
+}
+elseif($TestAutoDV2){
     callOnPremAutoDV2
 }
 else {
