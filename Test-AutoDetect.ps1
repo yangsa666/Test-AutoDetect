@@ -2,7 +2,8 @@ param (
     [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
     [String[]]$Email,
     [Switch]$Hybrid,
-    [Switch]$TestAutoDV2,
+    [Switch]$TestEXOAutoDV2,
+    [Switch]$TestOnPremAutoDV2,
     [String]$CustomAutoD
 )
 
@@ -278,13 +279,47 @@ function callOnPremAutoDV2 {
     }
 }
 
+function callEXOAutoDV2 {
+    process{
+        try {
+            Write-Host
+            Write-Host "Calling EXO AutoDiscover endpoint to discover the Mailbox" -ForegroundColor Green
+            $exoAutoDEndpoint =  "https://outlook.office.com/autodiscover/autodiscover.json?Email=$($Email)&Protocol=ActiveSync"
+            $timeTaken = Measure-Command -Expression {$exoAutoDResponse = Invoke-WebRequest -Uri $exoAutoDEndpoint -Headers $headers -Method GET} 
+            $exoAutoDResult = $exoAutoDResponse.Content | ConvertFrom-Json
+            $milliseconds = $timeTaken.TotalMilliseconds
+            $milliseconds = [Math]::Round($milliseconds, 1)
+            $requestId = $exoAutoDResponse.Headers.'request-id'
+            Write-Host
+            Write-Host "We sent an AutoDiscover Request to Exchange Online AutoDiscover Endpoint and below is the response" -ForegroundColor Green
+            Write-Host "The response should contain the Protocol ActiveSync with a valid URL" -ForegroundColor Yellow
+            Write-Host "---------------------------------------------------------------------------------------------------------------"
+            Write-Host "Response Body: ", $exoAutoDResult
+            Write-Host "Time Taken:    ", $milliseconds, "ms"
+            Write-Host "Request Id:    ", $requestId
+            Write-Host
+            
+        }    
+        catch {
+            Write-Host
+            Write-Host "We're unable to complete the AutoDiscover Reuqest for this email adress with following error" -ForegroundColor Red
+            Write-Host "---------------------------------------------------------------------------------------------------------------"
+            Write-Error $_.Exception.Message
+            Write-Host            
+        }
+    }
+}
+
 if($Hybrid) {
     callAutoDetect
-    callOnPremAutoDV2
+    callEXOAutoDV2
 }
-elseif($TestAutoDV2){
-    callOnPremAutoDV2
+elseif($TestEXOAutoDV2){
+    callEXOAutoDV2
 }
+elseif ($TestOnPremAutoDV2) {
+    callOnPremAutoDV2
+} 
 else {
     getFederationProvider
 }

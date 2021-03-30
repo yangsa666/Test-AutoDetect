@@ -13,6 +13,7 @@
 
 **For example**: `.\Test-AutoDetect.ps1 -Email "test@contoso.com"`
 
+
 ## For Hybrid Exchange accounts
 
 You can also run the command with additional params like this:
@@ -21,22 +22,28 @@ You can also run the command with additional params like this:
 
 ### `-Hybrid`
 
-`-Hybrid` will call the On-Prem AutoDiscover endpoint additonally.
+`-Hybrid` will call the EXO AutoDiscover endpoint additonally.
 
-**For example:** `.\Test-AutoDetect.ps1 -Email "hybrid@contoso.com" -Hybrid`
+**For example:** 
+`.\Test-AutoDetect.ps1 -Email "hybrid@contoso.com" -Hybrid`
 
-`.\Test-AutoDetect.ps1 -Email {yourTestEmailAddress} -Hybrid -CustomAutoD {theHostnameOfCustomAutoDiscover}` 
 
 ### `-CustomAutoD`
 
-`.\Test-AutoDetect.ps1 -Email {yourTestEmailAddress} -Hybrid -CustomAutoD {theHostnameOfCustomAutoDiscover}` 
+`.\Test-AutoDetect.ps1 -Email {yourTestEmailAddress} -CustomAutoD {theHostnameOfCustomAutoDiscover}` 
 
 `-CustomAutoD {theHostnameOfCustomAutoDiscover}` allows you specificing the custom OnPrem AutoDiscover Hostname.
 
-**For example：** `.\Test-AutoDetect.ps1 -Email "hybrid@contoso.com" -Hybrid -CustomAutoD "autodiscover.contoso.com"`
+**For example：** `.\Test-AutoDetect.ps1 -Email "hybrid@contoso.com" -CustomAutoD "autodiscover.contoso.com"`
 
-### `-TestAutoDV2`
+### `-TestEXOAutoDV2`
+
+`-TestAutoDV2` allows you to call the EXO AutoDiscoverV2 endpoint alone.
+
+**For example:**  `.\Test-AutoDetect.ps1 -Email "hybrid@contoso.com" -TestEXOAutoDV2`
+
+### `-TestOnPremAutoDV2`
 
 `-TestAutoDV2` allows you to call the On-Prem AutoDiscoverV2 endpoint alone.
 
-**For example:**  `.\Test-AutoDetect.ps1 -Email "hybrid@contoso.com" -TestAutoDV2`
+**For example:**  `.\Test-AutoDetect.ps1 -Email "hybrid@contoso.com" -TestOnPremAutoDV2`
