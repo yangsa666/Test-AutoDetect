@@ -38,12 +38,12 @@ You can also run the command with additional params like this:
 
 ### `-TestEXOAutoDV2`
 
-`-TestAutoDV2` allows you to call the EXO AutoDiscoverV2 endpoint alone.
+`-TestEXOAutoDV2` allows you to call the EXO AutoDiscoverV2 endpoint alone.
 
 **For example:**  `.\Test-AutoDetect.ps1 -Email "hybrid@contoso.com" -TestEXOAutoDV2`
 
 ### `-TestOnPremAutoDV2`
 
-`-TestAutoDV2` allows you to call the On-Prem AutoDiscoverV2 endpoint alone.
+`-TestOnPremAutoDV2` allows you to call the On-Prem AutoDiscoverV2 endpoint alone.
 
 **For example:**  `.\Test-AutoDetect.ps1 -Email "hybrid@contoso.com" -TestOnPremAutoDV2`
