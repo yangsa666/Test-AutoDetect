@@ -86,6 +86,7 @@ function callAutoDetect {
             $requestId = $autoDetectResponse.Headers.'X-Request-Id'
             $responseTime = $autoDetectResponse.Headers.'X-Response-Time'
             $responseDate = $autoDetectResponse.Headers.'Date'
+            $autoDV2Error = $autoDetectResponse.Headers.'X-AutoDv2-Error'
             #Write-Host $autoDetectResult
             if($autoDetectResponse.StatusCode -eq 200 ) {
                 #Check if the service is Office365, if not, it needs to contact OM PG to change it
@@ -99,8 +100,6 @@ function callAutoDetect {
                         Write-Host "---------------------------------------------------------------------------------------------------------------"
                         Write-Host "Email:          " $autoDetectResult.email
                         Write-Host "Service:        " $autoDetectResult.services.service
-                        Write-Host "Protocol:       " $autoDetectResult.services.protocol
-                        Write-Host "Hostname:       " $autoDetectResult.services.hostname
                         Write-Host "Azure AD:       " $autoDetectResult.services.aad
                         Write-Host "On-Premises:    " $autoDetectResult.services.onprem
                         Write-Host "X-Request-Id:   " $requestId
@@ -116,7 +115,6 @@ function callAutoDetect {
                         Write-Host "Email:          " $autoDetectResult.email
                         Write-Host "Service:        " $autoDetectResult.services.service
                         Write-Host "Protocol:       " $autoDetectResult.services.protocol
-                        Write-Host "Hostname:       " $autoDetectResult.services.hostname
                         Write-Host "Azure AD:       " $autoDetectResult.services.aad
                         Write-Host "On-Premises:    " $autoDetectResult.services.onprem
                         Write-Host "X-Request-Id:   " $requestId
@@ -133,11 +131,11 @@ function callAutoDetect {
                         Write-Host "Email:          " $autoDetectResult.email
                         Write-Host "Service:        " $autoDetectResult.services.service
                         Write-Host "Protocol:       " $autoDetectResult.services.protocol
-                        Write-Host "Hostname:       " $autoDetectResult.services.hostname
                         Write-Host "Azure AD:       " $autoDetectResult.services.aad
                         Write-Host "On-Premises:    " $autoDetectResult.services.onprem
                         Write-Host "X-Request-Id:   " $requestId
                         Write-Host "X-Response-Time:" $responseTime
+                        Write-Host "AutoDV2 Error:  " $autoDV2Error
                         Write-Host "Date:           " $responseDate
                         Write-Host
                     }
