@@ -8,19 +8,18 @@ param (
 )
 
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-$EmailAddress = $Email.Split("@")
+$emailAddress = $Email.Split("@")
 $headers = @{'Accept' = 'application/json'}
 
 #Get federation provider
-function getFederationProvider {
+function Get-FederationProvider {
     process{
         try {
             Write-Host
-            Write-Host "Calling GetFederationProvider service to see if it's a sovereign cloud account." -ForegroundColor Green
+            Write-Host "Get Federation Provider to see if it's a sovereign cloud account." -ForegroundColor Green
             $getFederationProviderServiceUrl =  "https://odc.officeapps.live.com/odc/v2.1/federationprovider?domain=$($EmailAddress[1])"
             $getFederationProviderResponse = Invoke-WebRequest -Uri $getFederationProviderServiceUrl -Headers $headers -Method GET
             $getFederationProviderResult = $getFederationProviderResponse.Content | ConvertFrom-Json
-            #$environment =  $getFederationProviderResult.environment
             $configProvider = $getFederationProviderResult.configProviderName
 
             #Check if it returns configProviderName. If not, it should not be a sovereign cloud account.
@@ -28,7 +27,7 @@ function getFederationProvider {
             if(!$configProvider) {
                 Write-Host
                 Write-Host "It's not a sovereign cloud account, continue with AutoDetect." -ForegroundColor Green
-                callAutoDetect
+                Test-AutoDetect
             }
             else {
                 switch ($configProvider) {
@@ -38,7 +37,7 @@ function getFederationProvider {
                     "partner.microsoftonline.cn" { Write-Host "It's detected as a Gallatin account." -ForegroundColor Green }
                     "microsoftonline.de" { Write-Host "It's detected as a Black Forest account." -ForegroundColor Green }
                 }
-                getserviceEndpoints
+                Get-ServiceEndpoints
             }
         }
         catch {
@@ -48,7 +47,7 @@ function getFederationProvider {
 }
 
 #Get EWS, AutoDiscover endpoints
-function getserviceEndpoints {
+function Get-ServiceEndpoints {
     process{
         try {
             Write-Host
@@ -74,7 +73,7 @@ function getserviceEndpoints {
     }
 }
 #Call AutoDetect service
-function callAutoDetect {
+function Test-AutoDetect {
     process{
         try{
             $autoDetectURL = "https://prod-AutoDetect.outlookmobile.com/detect?protocols=eas,rest-cloud,imap,pop3,Email&timeout=13.5&services=office365,outlook,google,icloud,yahoo"
@@ -221,7 +220,7 @@ function callAutoDetect {
 }
 
 #Call OnPrem AutoDiscoverV2
-function callOnPremAutoDV2 {
+function Test-OnPremAutoDV2 {
     process {
         try {
             if ($CustomAutoD) {
@@ -277,7 +276,7 @@ function callOnPremAutoDV2 {
     }
 }
 
-function callEXOAutoDV2 {
+function Test-EXOAutoDV2 {
     process{
         try {
             Write-Host
@@ -309,15 +308,15 @@ function callEXOAutoDV2 {
 }
 
 if($Hybrid) {
-    callAutoDetect
-    callEXOAutoDV2
+    Test-AutoDetect
+    Test-EXOAutoDV2
 }
 elseif($TestEXOAutoDV2){
-    callEXOAutoDV2
+    Test-EXOAutoDV2
 }
 elseif ($TestOnPremAutoDV2) {
-    callOnPremAutoDV2
+    Test-OnPremAutoDV2
 } 
 else {
-    getFederationProvider
+    Get-FederationProvider
 }
